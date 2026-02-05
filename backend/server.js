@@ -23,26 +23,25 @@ if (missingEnv.length > 0) {
 
 const app = express();
 
-// CORS - origins from env; fallback to localhost for local dev
-const defaultOrigins = [
-  'http://localhost:5173',
-  'http://localhost:3000',
-  'http://127.0.0.1:5173',
-  'http://127.0.0.1:3000',
-];
+// CORS - all origins from env (production-safe)
+const devOrigins = process.env.NODE_ENV !== 'production'
+  ? ['http://localhost:5173', 'http://localhost:3000', 'http://127.0.0.1:5173', 'http://127.0.0.1:3000']
+  : [];
 const envOrigins = process.env.CORS_ORIGINS
   ? process.env.CORS_ORIGINS.split(',').map(s => s.trim()).filter(Boolean)
   : [];
-const allowedOrigins = [
-  ...new Set([...defaultOrigins, ...envOrigins, process.env.FRONTEND_URL].filter(Boolean)),
-];
+const frontendUrl = process.env.FRONTEND_URL ? process.env.FRONTEND_URL.trim() : null;
+const allowedOrigins = [...new Set([...devOrigins, ...envOrigins, frontendUrl].filter(Boolean))];
 
+const isProduction = process.env.NODE_ENV === 'production';
 app.use(cors({
   origin: (origin, callback) => {
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
+    } else if (isProduction) {
+      callback(null, false);
     } else {
-      callback(null, true); // Allow in dev; tighten for production
+      callback(null, true);
     }
   },
   credentials: true
