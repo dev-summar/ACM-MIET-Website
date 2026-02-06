@@ -2,10 +2,12 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { API_ENDPOINTS, getAuthHeader } from '../../config/api';
 
+const DEFAULT_VIDEO_URL = import.meta.env.VITE_DEFAULT_HERO_VIDEO_URL || '';
+
 const HeroSettings = () => {
   const [settings, setSettings] = useState({
     displayMode: 'video',
-    videoUrl: 'https://res.cloudinary.com/dgipomlqg/video/upload/v1741114421/IEEE_YESIST_20250303_180504_0001_dcrljw.mp4'
+    videoUrl: DEFAULT_VIDEO_URL
   });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -22,7 +24,7 @@ const HeroSettings = () => {
       const response = await axios.get(API_ENDPOINTS.HERO_SETTINGS);
       setSettings({
         displayMode: response.data.displayMode || 'video',
-        videoUrl: response.data.videoUrl || 'https://res.cloudinary.com/dgipomlqg/video/upload/v1741114421/IEEE_YESIST_20250303_180504_0001_dcrljw.mp4'
+        videoUrl: response.data.videoUrl || DEFAULT_VIDEO_URL
       });
     } catch (error) {
       console.error('Error fetching hero settings:', error);

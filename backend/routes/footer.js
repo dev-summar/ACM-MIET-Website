@@ -13,17 +13,17 @@ const DEFAULT_QUICK_LINKS = [
 ];
 
 const defaultFooter = () => ({
-  description: 'Empowering students through technology, innovation, and professional development.',
+  description: process.env.DEFAULT_FOOTER_DESCRIPTION || 'Empowering students through technology, innovation, and professional development.',
   quickLinks: DEFAULT_QUICK_LINKS,
   contact: {
-    email: 'acm.sb@mietjammu.in',
-    address: 'MIET Jammu Campus, Kot Bhalwal Jammu J&K',
+    email: process.env.DEFAULT_CONTACT_EMAIL || 'acm.sb@mietjammu.in',
+    address: process.env.DEFAULT_CONTACT_ADDRESS || 'MIET Jammu Campus, Kot Bhalwal Jammu J&K',
   },
   socialMedia: {
-    linkedin: 'https://in.linkedin.com/company/acmsc-miet',
-    instagram: 'https://www.instagram.com/acmmiet/',
-    facebook: '',
-    twitter: '',
+    linkedin: process.env.DEFAULT_LINKEDIN_URL || 'https://in.linkedin.com/company/acmsc-miet',
+    instagram: process.env.DEFAULT_INSTAGRAM_URL || 'https://www.instagram.com/acmmiet/',
+    facebook: process.env.DEFAULT_FACEBOOK_URL || '',
+    twitter: process.env.DEFAULT_TWITTER_URL || '',
   },
 });
 

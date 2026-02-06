@@ -75,7 +75,7 @@ npm install
    ```
 2. For local development, the default `.env` should work:
    ```
-   VITE_API_URL=http://localhost:5000/api
+   VITE_API_BASE_URL=http://localhost:5000/api
    ```
 
 ### Start the frontend
@@ -126,11 +126,11 @@ Then open http://localhost:5173 in your browser.
 ### Backend won't start
 - **Missing env vars**: Ensure all required variables in `.env` are set
 - **MongoDB connection failed**: Check MongoDB is running and URI is correct
-- **Port 5000 in use**: Set `PORT=5001` in `.env` and update frontend `VITE_API_URL`
+- **Port 5000 in use**: Set `PORT=5001` in `.env` and update frontend `VITE_API_BASE_URL`
 
 ### Frontend API calls fail (404/CORS)
 - Ensure backend is running on port 5000
-- Check `VITE_API_URL` in frontend `.env` is `http://localhost:5000/api` (include `/api`)
+- Check `VITE_API_BASE_URL` in frontend `.env` is `http://localhost:5000/api` (include `/api`)
 - CORS is configured for localhost:5173 and localhost:3000
 
 ### Login fails
@@ -143,7 +143,19 @@ Then open http://localhost:5173 in your browser.
 
 ## 6. Production Deployment
 
-- **Backend**: Deploy to Railway, Render, Heroku, or VPS. Set env vars in platform.
-- **Frontend**: Build with `npm run build`, deploy `dist/` to Vercel, Netlify, or static host.
-- Set `VITE_API_URL` to your production API URL before building.
-- Set `FRONTEND_URL` in backend for CORS in production.
+**All configuration is from environment variables - no hardcoded URLs.**
+
+### Backend (Railway, Render, Heroku, VPS)
+Set these in your platform's env config:
+- `NODE_ENV=production`
+- `MONGODB_URI`, `JWT_SECRET`, `CLOUDINARY_*` (required)
+- `FRONTEND_URL` - Your deployed frontend URL (required for CORS)
+- `CORS_ORIGINS` - Optional comma-separated extra origins
+- `PORT` - Optional (default 5000)
+- `DEFAULT_*` - Optional footer/contact defaults
+
+### Frontend (Vercel, Netlify, static host)
+1. Copy `.env.production.example` to `.env.production`
+2. Set `VITE_API_BASE_URL` to your production API URL (e.g. `https://api.yourdomain.com/api`)
+3. Optionally set `VITE_DEFAULT_HERO_VIDEO_URL` for hero fallback
+4. Run `npm run build` and deploy `dist/`
